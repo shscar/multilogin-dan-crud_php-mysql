@@ -80,7 +80,7 @@
 					<td align=left><?= $row["kategori"] ?></td>
 					<td align=center><?= $row["jumlah"] ?></td>
 					<td align=left>Rp. <?= $row["harga"] ?></td>
-					<td align=center><img src="gambar/<?= $row["gambar"]; ?>" width="70" height="70"></td>
+					<td align=center><img src="../assets/gambar/<?= $row["gambar"]; ?>" width="70" height="70"></td>
 					<td class='action-links'>
 						<a href="edit_barang.php?id=<?php echo $row['idbarang']; ?>">Edit</a> <span>|</span>
 						<?php if ($user_level == 'admin') : ?>
@@ -93,6 +93,6 @@
 			</table>
 		</div>
 	</center>
-	<script src="assets/js/cari.js"></script>
+	<script src="../assets/js/cari.js"></script>
 </body>
 </html>

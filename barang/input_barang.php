@@ -2,7 +2,7 @@
 //-------------------Cek Login-----------------
 session_start();
 if (!isset($_SESSION['level']) || ($_SESSION['level'] != 'admin' && $_SESSION['level'] != 'pegawai')) {
-	header("Location: menu.php");
+	header("Location: ../menu.php");
 	exit(); 
 }
 //---------------------------------//
@@ -26,7 +26,7 @@ include "../config/koneksi.php";
 		
 		// Bila yg diinput lengkap//
 		if(!empty($lokasi_file)){
-			move_uploaded_file($lokasi_file, "gambar/$nama_file");
+			move_uploaded_file($lokasi_file, "../assets/gambar/$nama_file");
 		$a = mysqli_query($konek, "INSERT INTO barang (namabrg, brand, kategori, jumlah, harga, gambar)
 		VALUES('$_POST[barang]', '$_POST[brand]', '$_POST[kategori]', '$_POST[jumlah]', '$_POST[harga]', '$nama_file')");
 

@@ -100,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Hash password (recommended)
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO login (username, password, level) VALUES ('$username', '$hashed_password', '$level')";
+    // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $sql = "INSERT INTO login (username, password, level) VALUES ('$username', '$password', '$level')";
 
     // Execute
     if (mysqli_query($konek, $sql)) {

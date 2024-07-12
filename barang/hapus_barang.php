@@ -2,7 +2,7 @@
 //---------------------//
 session_start();
 if ($_SESSION['level'] != 'admin') {
-	header("Location: menu.php");
+	header("Location: ../menu.php");
 	exit();
 }
 //------------------//

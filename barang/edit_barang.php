@@ -2,7 +2,7 @@
     //------------------------//
     session_start();
     if (!isset($_SESSION['level']) || ($_SESSION['level'] != 'admin' && $_SESSION['level'] != 'pegawai')) {
-        header("Location: index.php");
+        header("Location: ../menu.php");
         exit();
     }
     //-----------------------//
@@ -63,7 +63,7 @@
                     </tr>
                     <tr>
                         <td>Gambar</td>
-                        <td><img src="gambar/<?php echo htmlspecialchars($row['gambar']); ?>" width="200" height="200"></td>
+                        <td><img src="../assets/gambar/<?php echo htmlspecialchars($row['gambar']); ?>" width="200" height="200"></td>
                     </tr>
                     <tr>
                         <td>Ganti Gambar</td>
@@ -80,16 +80,6 @@
                     </tr>
                 </table>
             </form>
-            <br><br>
-            <table>
-
-                <!-- <form method="POST" action="menu.php">
-                    <button>Menu Utama</button>
-                </form>
-                <form method="POST" action="tampil_barang.php">
-                    <button>Tampil Barang</button>
-                </form> -->
-            </table>
         </div>
     </center>
 </body>
