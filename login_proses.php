@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['username'] = $row['username'];
         $_SESSION['level'] = $row['level'];
 
-		header("location:dashboard.php");
+		header("location:component/dashboard.php");
     } else {
         header("location:index.php?pesan=gagal");
     }

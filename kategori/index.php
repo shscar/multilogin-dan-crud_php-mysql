@@ -2,27 +2,31 @@
     include('../component/navbar.php');
 
 	$kategori = query("SELECT * FROM kategori");
+    // $kategori = "SELECT * FROM kategori";
 
 ?>
 
+<head>
+    <title>Data Kategori</title>
+</head>
+<body>
     <!-- SECTION -->
     <div class="content-wrapper">
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
                     <h4 class="header-line">
-						<?php
-						echo "Selamat " . $greeting . " " . $_SESSION['username'];
-						?>
+						<?php echo "Selamat " . $greeting . " " . $_SESSION['username'];?>
 					</h4>
                 </div>
-
             </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Kategori
+                            <button type="button" onclick="location.href='create.php'" class="btn btn-primary btn-sm" style="float: right;">Tambah</button>
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
@@ -46,7 +50,7 @@
                                                 <a href="update.php?id_kategori=<?php echo $ket['id_kategori']; ?>">Edit</a> <span>|</span>
                                                 
                                                 <?php if ($user_level == 'admin') : ?>
-                                                    <a href="k_delete.php?id=<? echo $ket['id_kategori']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
+                                                    <a href="delete.php?id_kategori=<?php echo $ket['id_kategori']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -60,3 +64,4 @@
             </div>
         </div>
     </div>
+</body>

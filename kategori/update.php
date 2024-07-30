@@ -1,78 +1,83 @@
 <?php
-//---------------------------------//
-session_start();
-if ($_SESSION['level'] != 'admin') {
-	header("Location: ../menu.php");
-	exit();
-}
-//---------------------------------//
+    include('../component/navbar.php');
+    //---------------------------------//
+    if ($_SESSION['level'] != 'admin') {
+        header("Location: ../component/dashboard.php");
+        exit();
+    }
+    //---------------------------------//
 
-include "../config/koneksi.php";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id_kategori = $_POST['id_kategori'];
-    $nama_kategori = $_POST['nama_kategori'];
-    $keterangan = $_POST['keterangan'];
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $id_kategori = $_POST['id_kategori'];
+        $nama_kategori = $_POST['nama_kategori'];
+        $keterangan = $_POST['keterangan'];
 
-    // Query untuk memperbarui data
-    $sql = "UPDATE kategori SET nama_kategori=?, keterangan=? WHERE id_kategori=?";
-    $stmt = $konek->prepare($sql);
-    $stmt->bind_param("ssi", $nama_kategori, $keterangan, $id_kategori);
+        // Query untuk memperbarui data
+        $sql = "UPDATE kategori SET nama_kategori=?, keterangan=? WHERE id_kategori=?";
+        $stmt = $konek->prepare($sql);
+        $stmt->bind_param("ssi", $nama_kategori, $keterangan, $id_kategori);
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Data kategori berhasil diperbarui.');</script>";
-        header("Location: k_read.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $konek->error;
+        if ($stmt->execute()) {
+            echo "<script>alert('Data kategori berhasil diperbarui.');</script>";
+            header("Location: index.php");
+        } else {
+            echo "Error: " . $sql . "<br>" . $konek->error;
+        }
+
+        $stmt->close();
+        $konek->close();
     }
 
-    $stmt->close();
-    $konek->close();
-}
+    $id_kategori = $_GET['id_kategori'];
+    if (!isset($id_kategori) || !is_numeric($id_kategori)) {
+        die("Invalid ID.");
+    }
 
-$id_kategori = $_GET['id_kategori'];
-if (!isset($id_kategori) || !is_numeric($id_kategori)) {
-    die("Invalid ID.");
-}
+    $edit = mysqli_query($konek, "SELECT * FROM kategori WHERE id_kategori='$id_kategori'");
+    $ket = mysqli_fetch_array($edit);
 
-$edit = mysqli_query($konek, "SELECT * FROM kategori WHERE id_kategori='$id_kategori'");
-$ket = mysqli_fetch_array($edit);
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
     <title>Edit Kategori</title>
-    <link rel="stylesheet" href="../assets/css/ebarang.css">
 </head>
 <body>
-    <center>
-        <h2>Edit Kategori</h2>
-        <h5>Login Sebagai: <?php echo htmlspecialchars($_SESSION['username']); ?></h5>
-        <div class="glass">
-            <form method="POST" enctype="multipart/form-data" name="update" action="#">
-                <input type="hidden" name="id_kategori" value="<?php echo htmlspecialchars($ket['id_kategori']); ?>">
-                <table align="center" border="0" id="table">
-                    <tr>
-                        <td valign="top">Nama Kategori</td>
-                        <td><input type="text" name="nama_kategori" size="30" value="<?php echo htmlspecialchars($ket['nama_kategori']); ?>"></td>
-                    </tr>
-                    <tr>
-                        <td>Keterangan</td>
-                        <td><textarea name="keterangan" rows="4" cols="30"><?php echo htmlspecialchars($ket['keterangan']); ?></textarea></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">
-                            <input id="update" type="submit" value="Perbarui">
-                            <button type="button" onclick="history.back();">Cancel</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-            <br><br>
-            <table>
-                <!-- Add any additional buttons or links here -->
-            </table>
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row pad-botm">
+                <div class="col-md-12">
+                    <h4 class="header-line">
+						<?php echo "Selamat " . $greeting . " " . $_SESSION['username'];?>
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            BASIC FORM
+                        </div>
+                        <div class="panel-body">
+                            <form role="form" method="POST" action="">
+                                <input type="hidden" name="id_kategori" value="<?php echo htmlspecialchars($ket['id_kategori']); ?>" />
+                                <div class="form-group">
+                                    <label>Enter Name</label>
+                                    <input class="form-control" type="text" name="nama_kategori" value="<?php echo htmlspecialchars($ket['nama_kategori']); ?>" />
+                                    <p class="help-block">Help text here.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Text area</label>
+                                    <textarea class="form-control" rows="3" name="keterangan"><?php echo htmlspecialchars($ket['keterangan']); ?></textarea>
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                    <button type="button" class="btn btn-warning" onclick="history.back();">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </center>
+    </div>
 </body>
-</html>

@@ -10,15 +10,17 @@
 	}
 ?>
 
+<head>
+    <title>Data Barang</title>
+</head>
+<body>
     <!-- SECTION -->
     <div class="content-wrapper">
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
                     <h4 class="header-line">
-						<?php
-						echo "Selamat " . $greeting . " " . $_SESSION['username'];
-						?>
+						<?php echo "Selamat " . $greeting . " " . $_SESSION['username'];?>
 					</h4>
                 </div>
 
@@ -28,8 +30,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Barang
-
-                            <button onclick="location.href='create.php'" class="btn btn-success">Tambah</button>
+                            <button type="button" onclick="location.href='create.php'" class="btn btn-primary btn-sm" style="float: right;">Tambah</button>
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
@@ -58,10 +59,10 @@
                                             <td>Rp. <?= $row["harga"] ?></td>
                                             <td class="center"><img src="../assets/gambar/<?= $row["gambar"]; ?>" width="70" height="70"></td>
                                             <td class='action-links'>
-                                                <a href="edit_barang.php?id=<?php echo $row['idbarang']; ?>">Edit</a> <span>|</span>
+                                                <a href="update.php?id=<?php echo $row['idbarang']; ?>">Edit</a> <span>|</span>
 
                                                 <?php if ($user_level == 'admin') : ?>
-                                                    <a href="hapus_barang.php?id=<? echo $row['idbarang']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
+                                                    <a href="delete.php?id=<?php echo $row['idbarang']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Execute
     if (mysqli_query($konek, $sql)) {
         echo "<script>alert('Registration successful!.');</script>";
-        header("Location: dashboard.php");
+        header("Location: component/dashboard.php");
     } else {
         header("location:index.php?pesan=gagal");
     }

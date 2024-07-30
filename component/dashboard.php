@@ -1,27 +1,9 @@
 <?php
-    include('component/navbar.php');
+    include('../component/navbar.php');
 ?>
 
-    <!-- <center>
-		<p align="center"><font size="12"><b>MENU UTAMA</b></font></p>
-		<?php
-			echo "<h5>Hallo " . $_SESSION['username'] . " " . $greeting . "</h5>";
-			
-		?>
-		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-		<lottie-player src="https://assets9.lottiefiles.com/packages/lf20_1pxqjqps.json" background="transparent" speed="1" style="width: 400px; height: 400px;"loop autoplay></lottie-player>
-	   
-	   	<?php if ($user_level == 'admin') : ?>
-			<button onclick="location.href='kategori/k_read.php'">Tampil Kategori</button></br></br>
-		<?php endif; ?>
-		<button onclick="location.href='barang/tampil_barang.php'">Tampil Barang</button></br></br>
-		<button onclick="location.href='logout.php'">LogOut</button>
-
-	</center> -->
-
-<!DOCTYPE html>
-
 <head>
+    <title>Dhasboard</title>
 </head>
 
 <body>
@@ -30,9 +12,7 @@
             <div class="row pad-botm">
                 <div class="col-md-12">
                     <h4 class="header-line">
-						<?php
-						echo "Selamat " . $greeting . " " . $_SESSION['username'];
-						?>
+						<?php echo "Selamat " . $greeting . " " . $_SESSION['username'];?>
 					</h4>
                 </div>
             </div>

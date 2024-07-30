@@ -1,7 +1,7 @@
 <?php
 $server = "localhost";
-$username = "debian-sys-maint";
-$password = "utZ4OvZujbtPHWiB";
+$username = "root";
+$password = "";
 $database = "pro_fikskom";
 
 $konek = mysqli_connect($server, $username, $password) or die ("koneksi Gagal!");
@@ -24,6 +24,13 @@ function hapus($id) {
 	
 	return mysqli_affected_rows($konek);
 }
+function hapus_k($id_kategori) {
+	global $konek;
+	mysqli_query($konek, "DELETE FROM kategori WHERE id_kategori = $id_kategori");
+	
+	return mysqli_affected_rows($konek);
+}
+
 
 // function cari($keyword){
 // 	$query = "SELECT * FROM barang WHERE
@@ -36,12 +43,12 @@ function hapus($id) {
 // 	return query($query);
 // }
 
-function cari($keyword){
-    // Menggunakan prepared statements untuk mencegah SQL Injection
-    global $konek;
-    $keyword = "%$keyword%";
-    $stmt = $konek->prepare("SELECT * FROM barang WHERE namabrg LIKE ? OR brand LIKE ? OR kategori LIKE ?");
-    $stmt->bind_param("sss", $keyword, $keyword, $keyword);
-    $stmt->execute();
-    return $stmt->get_result();
-}
+// function cari($keyword){
+//     // Menggunakan prepared statements untuk mencegah SQL Injection
+//     global $konek;
+//     $keyword = "%$keyword%";
+//     $stmt = $konek->prepare("SELECT * FROM barang WHERE namabrg LIKE ? OR brand LIKE ? OR kategori LIKE ?");
+//     $stmt->bind_param("sss", $keyword, $keyword, $keyword);
+//     $stmt->execute();
+//     return $stmt->get_result();
+// }

@@ -1,7 +1,7 @@
 <?php
     // ----------Cek Login ----------//
     session_start();
-    include('../config/koneksi.php');
+    include(__DIR__ . '/../config/koneksi.php');
     if (empty($_SESSION['username'])) {
         header("location:index.php");
     }
@@ -22,6 +22,7 @@
 
     $user_level = $_SESSION['level'];
 ?>
+
 <!DOCTYPE html>
 
 <head>
@@ -29,9 +30,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dhasboard</title>
+    
     <link href="../assets/css/bootstrap.css" rel="stylesheet" />
     <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="../assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
     <link href="../assets/css/style.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
@@ -52,8 +54,10 @@
             </div>
 
             <div class="right-div">
-                <button class="btn btn-default" onclick="location.href='../dashboard.php'">Dashboard</button>
-                <button class="btn btn-default" onclick="location.href='../user.php'">User</button>
+                <button class="btn btn-default" onclick="location.href='../component/dashboard.php'">Dashboard</button>
+                <?php if ($user_level == 'admin') : ?>
+                    <button class="btn btn-default" onclick="location.href='../user/index.php'">User</button>
+                <?php endif; ?>
                 <button class="btn btn-default" onclick="location.href='../kategori/index.php'">Kategori</button>
                 <button class="btn btn-default" onclick="location.href='../barang/index.php'">Barang</button>
                 <button class="btn btn-danger" onclick="location.href='../logout.php'">LOG OUT</button>
@@ -63,6 +67,8 @@
 
 	<script src="../assets/js/jquery-1.10.2.js"></script>
 	<script src="../assets/js/bootstrap.js"></script>
+    <script src="../assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="../assets/js/dataTables/dataTables.bootstrap.js"></script>
 	<script src="../assets/js/custom.js"></script>
 </body>
 </html>
