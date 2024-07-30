@@ -1,7 +1,7 @@
 <?php
 $server = "localhost";
-$username = "root";
-$password = "";
+$username = "debian-sys-maint";
+$password = "utZ4OvZujbtPHWiB";
 $database = "pro_fikskom";
 
 $konek = mysqli_connect($server, $username, $password) or die ("koneksi Gagal!");
@@ -20,35 +20,39 @@ function query($sql){
 
 function hapus($id) {
 	global $konek;
-	mysqli_query($konek, "DELETE FROM barang WHERE idbarang = $id");
-	
-	return mysqli_affected_rows($konek);
+
+    // Ambil nama file gambar yang terkait dengan entri
+    $query = "SELECT gambar FROM barang WHERE idbarang = ?";
+    $stmt = $konek->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $gambar_lama = $row['gambar'];
+    $stmt->close();
+
+    // Hapus entri dari database
+    $query = "DELETE FROM barang WHERE idbarang = ?";
+    $stmt = $konek->prepare($query);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $affected_rows = $stmt->affected_rows;
+    $stmt->close();
+
+    // Jika entri berhasil dihapus, hapus gambar dari folder
+    if ($affected_rows > 0) {
+        if (!empty($gambar_lama) && file_exists("../assets/gambar/$gambar_lama")) {
+            unlink("../assets/gambar/$gambar_lama");
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
+
 function hapus_k($id_kategori) {
 	global $konek;
 	mysqli_query($konek, "DELETE FROM kategori WHERE id_kategori = $id_kategori");
 	
 	return mysqli_affected_rows($konek);
 }
-
-
-// function cari($keyword){
-// 	$query = "SELECT * FROM barang WHERE
-// 		namabrg LIKE '%$keyword%' OR
-// 		brand LIKE '%$keyword%' OR
-// 		katagori LIKE '%$keyword%' OR
-// 		jumlah LIKE '%$keyword%' OR
-// 		harga LIKE '%$keyword%' OR
-// 	";
-// 	return query($query);
-// }
-
-// function cari($keyword){
-//     // Menggunakan prepared statements untuk mencegah SQL Injection
-//     global $konek;
-//     $keyword = "%$keyword%";
-//     $stmt = $konek->prepare("SELECT * FROM barang WHERE namabrg LIKE ? OR brand LIKE ? OR kategori LIKE ?");
-//     $stmt->bind_param("sss", $keyword, $keyword, $keyword);
-//     $stmt->execute();
-//     return $stmt->get_result();
-// }

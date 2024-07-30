@@ -1,31 +1,99 @@
 <?php
-include('../component/navbar.php');
-
-$id = $_GET['id'];
-if (!isset($id) || !is_numeric($id)) {
-    die("Invalid ID.");
-}
-
-$edit  = mysqli_query($konek, "SELECT * FROM barang WHERE idbarang='$id'");
-$row   = mysqli_fetch_array($edit);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $lokasi_file = $_FILES['fupload']['tmp_name'];
-    $nama_file = $_FILES['fupload']['name'];
-    
-    //Apabila Gambar Tidak Diganti
-    if (empty($lokasi_file)){
-        mysqli_query($konek,"UPDATE barang SET namabrg ='$_POST[barang]',brand ='$_POST[brand]',kategori ='$_POST[kategori]',jumlah ='$_POST[jumlah]',harga ='$_POST[harga]' WHERE idbarang ='$_POST[id]'");
+    // Ambil semua data pada file navbar
+    include('../component/navbar.php');
+    if ($_SESSION['level'] = 'user') {
+        header("Location: index.php");
+        exit();
     }
-    
-    //Apabila Gambar Diganti
-    else{
-        move_uploaded_file($lokasi_file,"../assets/gambar/$nama_file");
-        mysqli_query($konek,"UPDATE barang SET namabrg ='$_POST[barang]', brand ='$_POST[brand]', kategori ='$_POST[kategori]', jumlah ='$_POST[jumlah]', harga ='$_POST[harga]', gambar ='$nama_file' WHERE idbarang ='$_POST[id]'");
+
+    $id = $_GET['id'];
+    if (!isset($id) || !is_numeric($id)) {
+        die("Invalid ID.");
     }
-    
-    header('location:index.php');
-}
+
+    $edit  = mysqli_query($konek, "SELECT * FROM barang WHERE idbarang='$id'");
+    $row   = mysqli_fetch_array($edit);
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $lokasi_file = $_FILES['fupload']['tmp_name'];
+        $nama_file = $_FILES['fupload']['name'];
+        $error_file = $_FILES['fupload']['error'];
+
+        // Apabila Gambar Tidak Diganti
+        if (empty($lokasi_file)) {
+            $query = "UPDATE barang SET namabrg = ?, brand = ?, kategori = ?, jumlah = ?, harga = ? WHERE idbarang = ?";
+            $stmt = $konek->prepare($query);
+            $stmt->bind_param("sssidi", $_POST['barang'], $_POST['brand'], $_POST['kategori'], $_POST['jumlah'], $_POST['harga'], $_POST['id']);
+            
+            if ($stmt->execute()) {
+                echo "<script>
+                    alert('Data berhasil diperbarui');
+                    window.location='index.php';
+                </script>";
+            } else {
+                echo "<script>
+                    alert('Data gagal diperbarui');
+                    window.location='index.php';
+                </script>";
+            }
+
+            $stmt->close();
+        } 
+        
+        // Apabila Gambar Diganti
+        else {
+            // Ambil ekstensi file
+            $ekstensi_file = pathinfo($nama_file, PATHINFO_EXTENSION);
+
+            // Buat nama file baru dengan tanggal dan kode acak
+            $tanggal = date("Ymd");
+            $kode_acak = uniqid();
+            $nama_file_baru = $tanggal . "_" . $kode_acak . "." . $ekstensi_file;
+
+            // Ambil nama file gambar lama dari database
+            $query = "SELECT gambar FROM barang WHERE idbarang = ?";
+            $stmt = $konek->prepare($query);
+            $stmt->bind_param("i", $_POST['id']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $gambar_lama = $row['gambar'];
+            $stmt->close();
+
+            // Pindahkan file baru ke folder tujuan
+            if (move_uploaded_file($lokasi_file, "../assets/gambar/$nama_file_baru")) {
+                // Hapus file gambar lama
+                if (!empty($gambar_lama) && file_exists("../assets/gambar/$gambar_lama")) {
+                    unlink("../assets/gambar/$gambar_lama");
+                }
+
+                // Simpan data ke database
+                $query = "UPDATE barang SET namabrg = ?, brand = ?, kategori = ?, jumlah = ?, harga = ?, gambar = ? WHERE idbarang = ?";
+                $stmt = $konek->prepare($query);
+                $stmt->bind_param("sssidsi", $_POST['barang'], $_POST['brand'], $_POST['kategori'], $_POST['jumlah'], $_POST['harga'], $nama_file_baru, $_POST['id']);
+                
+                if ($stmt->execute()) {
+                    echo "<script>
+                        alert('Data berhasil diperbarui');
+                        window.location='index.php';
+                    </script>";
+                } else {
+                    echo "<script>
+                        alert('Data gagal diperbarui');
+                        window.location='index.php';
+                    </script>";
+                }
+
+                $stmt->close();
+            } else {
+                echo "<script>
+                    alert('Gagal mengupload gambar baru');
+                    window.location='index.php';
+                </script>";
+            }
+        }
+        $konek->close();
+    }
 ?>
 <head>
     <title>Tambah Kategori</title>
@@ -77,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                                 <div class="form-group">
                                     <label>Gambar</label></br>
-                                    <img src="../assets/gambar/<?php echo htmlspecialchars($row['gambar']); ?>" width="250" height="200">
+                                    <img src="../assets/gambar/<?php echo htmlspecialchars($row['gambar']); ?>" width="auto" height="200">
                                     <input class="form-control" type="file" name="fupload" />
                                 </div>
                                 <div class="form-group text-right">

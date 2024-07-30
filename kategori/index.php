@@ -1,9 +1,8 @@
 <?php
+    // Ambil semua data pada file navbar
     include('../component/navbar.php');
 
 	$kategori = query("SELECT * FROM kategori");
-    // $kategori = "SELECT * FROM kategori";
-
 ?>
 
 <head>
@@ -47,10 +46,12 @@
                                             <td><?= $ket["nama_kategori"] ?></td>
                                             <td><?= $ket["keterangan"] ?></td>
                                             <td class='action-links'>
-                                                <a href="update.php?id_kategori=<?php echo $ket['id_kategori']; ?>">Edit</a> <span>|</span>
-                                                
-                                                <?php if ($user_level == 'admin') : ?>
-                                                    <a href="delete.php?id_kategori=<?php echo $ket['id_kategori']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
+                                                <?php if ($user_level != 'user') : ?>
+                                                    <a class="btn btn-warning" href="update.php?id_kategori=<?php echo $ket['id_kategori']; ?>">Edit</a>
+                                                    <span>|</span>
+                                                    <a class="btn btn-danger" href="delete.php?id_kategori=<?php echo $ket['id_kategori']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
+                                                <?php else: ?>
+                                                    <span>-</span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

@@ -1,53 +1,58 @@
 <?php
-include('../component/navbar.php');
-
-// Ambil ID pengguna dari query string
-$id_akun = $_GET['id_akun']; // Misalnya ID pengguna diambil dari query string
-if (!isset($id_akun) || !is_numeric($id_akun)) {
-    die("Invalid ID.");
-}
-
-// Query untuk mendapatkan nilai enum dari kolom level
-$query = "SHOW COLUMNS FROM login LIKE 'level'";
-$result = mysqli_query($konek, $query) or die(mysqli_error($konek));
-$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-// Mendapatkan daftar nilai enum
-$type = $row['Type']; // Mengambil tipe data dari kolom
-preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
-$enum_values = explode("','", $matches[1]);
-
-// Ambil data pengguna yang ingin di-edit
-$query_user = "SELECT username, level FROM login WHERE id_akun = ?";
-$stmt_user = $konek->prepare($query_user);
-$stmt_user->bind_param("i", $id_akun);
-$stmt_user->execute();
-$result_user = $stmt_user->get_result();
-$user_data = $result_user->fetch_assoc();
-$stmt_user->close();
-
-// Nilai default yang sudah dipilih sebelumnya dari database
-$selected_level = $user_data['level'];
-
-// Proses update data
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $level = $_POST['level'];
-
-    // Query untuk memperbarui data
-    $sql = "UPDATE login SET level = ? WHERE id_akun = ?";
-    $stmt = $konek->prepare($sql);
-    $stmt->bind_param("si", $level, $id_akun);
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil diperbarui.');</script>";
-        header("Location: index.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $konek->error;
+    // Ambil semua data pada file navbar
+    include('../component/navbar.php');
+    if ($_SESSION['level'] != 'admin') {
+        header("Location: ../component/dashboard.php");
+        exit();
     }
 
-    $stmt->close();
-    $konek->close();
-}
+    // Ambil ID pengguna dari query string
+    $id_akun = $_GET['id_akun']; // Misalnya ID pengguna diambil dari query string
+    if (!isset($id_akun) || !is_numeric($id_akun)) {
+        die("Invalid ID.");
+    }
+
+    // Query untuk mendapatkan nilai enum dari kolom level
+    $query = "SHOW COLUMNS FROM login LIKE 'level'";
+    $result = mysqli_query($konek, $query) or die(mysqli_error($konek));
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+    // Mendapatkan daftar nilai enum
+    $type = $row['Type']; // Mengambil tipe data dari kolom
+    preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
+    $enum_values = explode("','", $matches[1]);
+
+    // Ambil data pengguna yang ingin di-edit
+    $query_user = "SELECT username, level FROM login WHERE id_akun = ?";
+    $stmt_user = $konek->prepare($query_user);
+    $stmt_user->bind_param("i", $id_akun);
+    $stmt_user->execute();
+    $result_user = $stmt_user->get_result();
+    $user_data = $result_user->fetch_assoc();
+    $stmt_user->close();
+
+    // Nilai default yang sudah dipilih sebelumnya dari database
+    $selected_level = $user_data['level'];
+
+    // Proses update data
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $level = $_POST['level'];
+
+        // Query untuk memperbarui data
+        $sql = "UPDATE login SET level = ? WHERE id_akun = ?";
+        $stmt = $konek->prepare($sql);
+        $stmt->bind_param("si", $level, $id_akun);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Data berhasil diperbarui.');</script>";
+            header("Location: index.php");
+        } else {
+            echo "Error: " . $sql . "<br>" . $konek->error;
+        }
+
+        $stmt->close();
+        $konek->close();
+    }
 ?>
 
 <head>

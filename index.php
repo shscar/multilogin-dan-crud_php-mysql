@@ -1,29 +1,22 @@
 <?php
-if (isset($_GET['pesan'])) {
-	//cek apakah login benar / salah
-	if ($_GET['pesan'] == "gagal") {
-		echo '<script type="text/JavaScript">
-					alert("Silahkan Masukan username dan password dengan benar")
-				</script>
-			';
-	}
-}
+	session_start();
+	include(__DIR__ . 'config/koneksi.php');
+	$user = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+
 ?>
 <!DOCTYPE html>
-
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="description" content="" />
 	<meta name="author" content="" />
-	<title>data</title>
+	<title>Data</title>
 	<link href="assets/css/bootstrap.css" rel="stylesheet" />
 	<link href="assets/css/font-awesome.css" rel="stylesheet" />
 	<link href="assets/css/style.css" rel="stylesheet" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
 </head>
-
 <body>
 	<section class="menu-section">
 		<div class="container">
@@ -31,11 +24,17 @@ if (isset($_GET['pesan'])) {
 				<div class="col-md-12">
 					<div class="navbar-collapse collapse d-flex justify-content-between align-items-center">
 						<ul id="menu-top" class="nav navbar-nav">
-							<li><a href="index.html" class="menu-top-active">Welcome</a></li>
-							<li><a href="#">Dashboard</a></li>
+							<li><a href="index.php" class="menu-top-active">Welcome</a></li>
+							<!-- <li><a href="#">Dashboard</a></li> -->
+						
 						</ul>
 						<div class="right-div">
-							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</a>
+							<!-- Ubah tobol jika sudah login -->
+							<?php if (isset($_SESSION['username'])): ?>
+								<a href="component/dashboard.php" class="btn btn-primary">Dashboard</a>
+							<?php else: ?>
+								<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</a>
+							<?php endif; ?>
 						</div>
 					</div>
 				</div>
@@ -181,30 +180,5 @@ if (isset($_GET['pesan'])) {
 	<script src="assets/js/jquery-1.10.2.js"></script>
 	<script src="assets/js/bootstrap.js"></script>
 	<script src="assets/js/custom.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			const inputs = document.querySelectorAll('.form__input');
-
-			function addFocus() {
-				let parent = this.parentNode.parentNode;
-				parent.classList.add('focus');
-			}
-
-			function removeFocus() {
-				let parent = this.parentNode.parentNode;
-				if (this.value === '') {
-					parent.classList.remove('focus');
-				}
-			}
-
-			inputs.forEach(input => {
-				input.addEventListener('focus', addFocus);
-				input.addEventListener('blur', removeFocus);
-			});
-		});
-
-	</script>
-
 </body>
-
 </html>

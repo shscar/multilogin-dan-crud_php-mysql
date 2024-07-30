@@ -1,12 +1,12 @@
 <?php
     include "../config/koneksi.php";
-    // //---------------------------//
+    // --------------------------- //
     session_start();
-    if ($_SESSION['level'] != 'admin') {
-        header("Location: ../component/dashboard.php");
+    if ($_SESSION['level'] = 'user') {
+        header("Location: index.php");
         exit();
     }
-    // //---------------------------//
+    // --------------------------- //
 
     $id_kategori = $_GET["id_kategori"];
     if( hapus_k($id_kategori) > 0 ) {

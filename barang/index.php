@@ -1,13 +1,8 @@
 <?php
+    // Ambil semua data pada file navbar
     include('../component/navbar.php');
 
 	$barang = query("SELECT * FROM barang");
-	$user_level = $_SESSION['level'];
-
-	// kolom pencarian terisi
-	if(isset($_POST["cari"]) ) {
-		$barang = cari($_POST["keyword"]);
-	}
 ?>
 
 <head>
@@ -51,18 +46,20 @@
                                         <?php $i = 1; ?>
                                         <?php foreach($barang as $row ){ ?>
                                         <tr class="odd grade">
-                                            <td class="center"><?= $i; ?></td>
+                                            <td class="text-center"><?= $i; ?>.</td>
                                             <td><?= $row["namabrg"] ?></td>
                                             <td><?= $row["brand"] ?></td>
                                             <td><?= $row["kategori"] ?></td>
-                                            <td class="center"><?= $row["jumlah"] ?></td>
+                                            <td class="text-center"><?= $row["jumlah"] ?></td>
                                             <td>Rp. <?= $row["harga"] ?></td>
-                                            <td class="center"><img src="../assets/gambar/<?= $row["gambar"]; ?>" width="70" height="70"></td>
+                                            <td class="text-center"><img src="../assets/gambar/<?= $row["gambar"]; ?>" width="auto" height="50px"></td>
                                             <td class='action-links'>
-                                                <a href="update.php?id=<?php echo $row['idbarang']; ?>">Edit</a> <span>|</span>
-
-                                                <?php if ($user_level == 'admin') : ?>
-                                                    <a href="delete.php?id=<?php echo $row['idbarang']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
+                                                <?php if ($user_level != 'user') : ?>
+                                                    <a class="btn btn-warning" href="update.php?id=<?php echo $row['idbarang']; ?>">Edit</a>
+                                                    <span>|</span>
+                                                    <a class="btn btn-danger" href="delete.php?id=<?php echo $row['idbarang']; ?>" onclick="return confirm('yakin ingin menghapus data ini ?')">Hapus</a>
+                                                <?php else: ?>
+                                                    <span>-</span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

@@ -1,29 +1,42 @@
-
 <?php
 session_start();
 include('config/koneksi.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+$username = $_POST['username'];
+$password = $_POST['password'];
 
-    // Melakukan query untuk memeriksa user
-    $sql = "SELECT * FROM login WHERE username = ? AND password = ?";
-    $stmt = $konek->prepare($sql);
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
+$sql = "SELECT * FROM login WHERE username = ?";
+$stmt = $konek->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['level'] = $row['level'];
+if ($user) {
+    // Ambil data user
+    $hashed_password = $user['password'];
+    $level = $user['level'];
 
-		header("location:component/dashboard.php");
+    // Verifikasi password
+    if (password_verify($password, $hashed_password)) {
+        $_SESSION['username'] = $username;
+        $_SESSION['level'] = $level;
+        header("Location: component/dashboard.php");
+        exit();
     } else {
-        header("location:index.php?pesan=gagal");
+		echo "<script type='text/JavaScript'>
+                alert('Silahkan Masukan username dan password dengan benar');
+                window.location='index.php';
+            </script>
+		";
+        exit();
     }
-    $stmt->close();
-    $konek->close();
+} else {
+    // User tidak ditemukan
+    echo "User tidak ditemukan.";
+    exit();
 }
+
+$stmt->close();
+$konek->close();
 ?>

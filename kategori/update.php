@@ -1,11 +1,10 @@
 <?php
+    // Ambil semua data pada file navbar
     include('../component/navbar.php');
-    //---------------------------------//
-    if ($_SESSION['level'] != 'admin') {
-        header("Location: ../component/dashboard.php");
+    if ($_SESSION['level'] = 'user') {
+        header("Location: index.php");
         exit();
     }
-    //---------------------------------//
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_kategori = $_POST['id_kategori'];

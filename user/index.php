@@ -1,5 +1,10 @@
 <?php
+    // Ambil semua data pada file navbar
     include('../component/navbar.php');
+    if ($_SESSION['level'] != 'admin') {
+        header("Location: ../component/dashboard.php");
+        exit();
+    }
     
 	$user = query("SELECT * FROM login");
 ?>
