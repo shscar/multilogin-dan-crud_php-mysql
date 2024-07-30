@@ -7,7 +7,6 @@ if ($_SESSION['level'] != 'admin') {
 }
 //---------------------------------//
 
-include('../component/navbar.php');
 include "../config/koneksi.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_kategori = $_POST['id_kategori'];

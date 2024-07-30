@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Execute
     if (mysqli_query($konek, $sql)) {
         echo "<script>alert('Registration successful!.');</script>";
-        header("Location: menu.php");
+        header("Location: dashboard.php");
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($konek);
     }

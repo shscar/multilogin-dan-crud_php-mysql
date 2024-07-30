@@ -1,7 +1,7 @@
 <?php
 $server = "localhost";
 $username = "debian-sys-maint";
-$password = "utZ40vZujbtPHWiB";
+$password = "utZ4OvZujbtPHWiB";
 $database = "pro_fikskom";
 
 $konek = mysqli_connect($server, $username, $password) or die ("koneksi Gagal!");
