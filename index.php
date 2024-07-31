@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	include(__DIR__ . 'config/koneksi.php');
+	include('config/koneksi.php');
 	$user = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 ?>
@@ -170,7 +170,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
-					&copy; 2024 shscar |<a href="https://shscar.git" target="_blank"> Designed by : shscar.git</a>
+					&copy; 2024 fikriatul_k |<a href="https://shscar.git" target="_blank"> Designed by : fikriatul_k - shscar.git</a>
 				</div>
 
 			</div>
